@@ -33,7 +33,13 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
+                        @guest
 
+                        @else
+
+                            <a class="nav-item nav-link @if(Route::currentRouteName() == 'home') active @endif" href="/">Home</a>
+                            <a class="nav-item nav-link @if(Route::currentRouteName() == 'gallery') active @endif" href="/gallery">Gallery</a>
+                        @endguest
                     </ul>
 
                     <!-- Right Side Of Navbar -->
