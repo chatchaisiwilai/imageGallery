@@ -17,3 +17,4 @@ Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('gallery', 'GalleryController@index')->middleware('auth')->name('gallery');
 Route::post('gallery/image', 'GalleryController@postImage')->name('gallery.post.image');
+Route::get('gallery/image/{id}', 'GalleryController@getImage')->name('gallery.get.image');

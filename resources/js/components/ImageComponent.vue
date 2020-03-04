@@ -1,13 +1,22 @@
 <template>
     <div class="col-4 mb-2">
-        <div>
-<!--            <img width="100%" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22286%22%20height%3D%22180%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20286%20180%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_1709fecd58f%20text%20%7B%20fill%3Argba(255%2C255%2C255%2C.75)%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A14pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1709fecd58f%22%3E%3Crect%20width%3D%22286%22%20height%3D%22180%22%20fill%3D%22%23777%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2299.4296875%22%20y%3D%2296.3421875%22%3EImage%20cap%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E">-->
+        <div style="height: 150px">
+            <h5 style="text-align: center;line-height: 150px;" v-show="isShowPercent">{{ percent }}%</h5>
+            <img :src="imageUrl" style="width: 100%;height: auto;max-height: 150px;">
         </div>
     </div>
 </template>
 
 <script>
     export default {
+        data: function () {
+            return {
+                percent: 0,
+                isShowPercent: true,
+                isShowImage: false,
+                imageUrl: ''
+            };
+        },
         props: [
             'uploadFile'
         ],
@@ -18,9 +27,18 @@
             formData.append('file', this.uploadFile);
 
             axios
-                .post('/gallery/image',formData)
-                .then(response => console.log(response.data));
-
+                .post('/gallery/image', formData, {
+                    onUploadProgress: function ( progressEvent ) {
+                        console.log(progressEvent.loaded + ' total : ' + progressEvent.total);
+                        this.percent = (progressEvent.loaded / progressEvent.total) * 100;
+                    }.bind(this)
+                })
+                .then(function (response) {
+                    this.isShowPercent = false;
+                    this.isShowImage = true;
+                    console.log(response);
+                    this.imageUrl = '/gallery/image/' + response.data.id;
+                }.bind(this));
         }
     }
 </script>
