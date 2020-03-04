@@ -42,4 +42,16 @@ class GalleryController extends Controller
             return response('file not found', 400);
         }
     }
+
+    public function deleteImage($id) {
+        $image = Images::find($id);
+        if ($image) {
+            Storage::delete($image->path);
+            $image->delete();
+
+            return response('success', 200);
+        } else {
+            return response('file not found', 400);
+        }
+    }
 }

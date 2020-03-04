@@ -1,14 +1,14 @@
 <template>
-    <div class="col-4 mb-2">
+    <div class="col-4 mb-2" v-show="isShowComponent">
         <div style="height: 150px">
             <h5 :style="imageBackground" v-show="isShowPercent">{{ textCenter }}</h5>
             <img :src="imageUrl" class="image" v-show="isShowImage">
             <div class="position-absolute t40l35" v-show="isShowSuccess">
                 <button type="button" class="btn btn-info" v-on:click="pushImageUrlToParent" data-toggle="modal" data-target="#exampleModalCenter"><i class="fas fa-search"></i></button>
-                <button type="button" class="btn btn-warning"><i class="fas fa-trash-restore-alt"></i></button>
+                <button type="button" class="btn btn-warning" v-on:click="notShowComponent"><i class="fas fa-trash-restore-alt"></i></button>
             </div>
             <div class="position-absolute t40l50 error" v-show="isShowError">
-                <button type="button" class="btn btn-danger"><i class="fas fa-search"></i></button>
+                <button type="button" class="btn btn-danger" v-on:click="notShowComponentError"><i class="fas fa-trash-restore-alt"></i></button>
             </div>
         </div>
 
@@ -24,6 +24,7 @@
                 isShowImage: false,
                 isShowSuccess: false,
                 isShowError: false,
+                isShowComponent: true,
                 imageBackground: {
                     textAlign: 'center',
                     lineHeight: '150px',
@@ -49,7 +50,6 @@
                 })
                 .then(function (response) {
                     if (response.status == 200) {
-                        console.log(response);
                         this.imageUrl = '/gallery/image/' + response.data.id;
                         this.isShowPercent = false;
                         this.isShowImage = true;
@@ -67,6 +67,17 @@
         methods: {
             pushImageUrlToParent() {
                 this.$emit('pushImageUrlToParent', this.imageUrl);
+            },
+            notShowComponent() {
+                console.log('destroyed!');
+                axios
+                    .delete(this.imageUrl)
+                    .then(function () {
+                        this.isShowComponent = false;
+                    }.bind(this))
+            },
+            notShowComponentError() {
+                this.isShowComponent = false;
             }
         }
     }
