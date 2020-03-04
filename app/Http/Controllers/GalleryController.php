@@ -29,7 +29,7 @@ class GalleryController extends Controller
             'path' => $file_store,
         ]);
 
-        return $images;
+        return response($images, 200);
     }
 
     public function getImage($id)

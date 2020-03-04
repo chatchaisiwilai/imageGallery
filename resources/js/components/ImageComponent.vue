@@ -1,8 +1,8 @@
 <template>
     <div class="col-4 mb-2">
         <div style="height: 150px">
-            <h5 style="text-align: center;line-height: 150px;" v-show="isShowPercent">{{ percent }}%</h5>
-            <img :src="imageUrl" style="width: 100%;height: auto;max-height: 150px;">
+            <h5 :style="imageBackground" v-show="isShowPercent">{{ textCenter }}</h5>
+            <img :src="imageUrl" style="width: 100%;height: auto;max-height: 150px;" v-show="isShowImage">
         </div>
     </div>
 </template>
@@ -11,9 +11,14 @@
     export default {
         data: function () {
             return {
-                percent: 0,
+                textCenter: '',
                 isShowPercent: true,
                 isShowImage: false,
+                isShowError: false,
+                imageBackground: {
+                    textAlign: 'center',
+                    lineHeight: '150px',
+                },
                 imageUrl: ''
             };
         },
@@ -30,14 +35,19 @@
                 .post('/gallery/image', formData, {
                     onUploadProgress: function ( progressEvent ) {
                         console.log(progressEvent.loaded + ' total : ' + progressEvent.total);
-                        this.percent = (progressEvent.loaded / progressEvent.total) * 100;
+                        this.textCenter = Math.round((progressEvent.loaded / progressEvent.total) * 100) + ' %';
                     }.bind(this)
                 })
                 .then(function (response) {
-                    this.isShowPercent = false;
-                    this.isShowImage = true;
-                    console.log(response);
-                    this.imageUrl = '/gallery/image/' + response.data.id;
+                    if (response.status == 200) {
+                        this.isShowPercent = false;
+                        this.isShowImage = true;
+                        console.log(response);
+                        this.imageUrl = '/gallery/image/' + response.data.id;
+                    } else {
+                        this.imageBackground.backgroundColor = red;
+                    }
+
                 }.bind(this));
         }
     }
