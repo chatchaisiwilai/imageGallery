@@ -24,7 +24,15 @@ class PostImage extends FormRequest
     public function rules()
     {
         return [
-            'file' => 'required|image'
+            'file' => 'required|file|mimes:jpeg,bmp,png|max:102400'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'file.mimes' => 'File type not supported.',
+            'file.max' => 'File size exceeded.',
         ];
     }
 }
