@@ -13,7 +13,7 @@
                             Total Size
                         </div>
                         <div class="col-8">
-                            xx.xxMB(x,xxxB)
+                            {{ number_format($disk_usage_overview_size/(1024*1024), 2) }}MB({{ number_format($disk_usage_overview_size) }}B)
                         </div>
                     </div>
                     <div class="row">
@@ -21,7 +21,7 @@
                             No of files
                         </div>
                         <div class="col-8">
-                            6
+                            {{ $disk_usage_overview_count }}
                         </div>
                     </div>
                 </div>
@@ -31,28 +31,28 @@
                 <div class="card-header">File Usage Compositions</div>
 
                 <div class="card-body">
-
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Type</th>
-                                <th scope="col">No of files</th>
-                                <th scope="col">Size</th>
-                            </tr>
+                    @if ($disk_usage_compositions->count() < 0)
+                        No data
+                    @else
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">No of files</th>
+                                    <th scope="col">Size</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <th scope="row">image/jpeg</th>
-                                <td>4</td>
-                                <td>xx.xxMB(x,xxxB)</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">image/png</th>
-                                <td>2</td>
-                                <td>xx.xxMB(x,xxxB)</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                            @foreach($disk_usage_compositions as $item)
+                                <tr>
+                                    <th scope="row">{{$item->mime}}</th>
+                                    <td>{{$item->count}}</td>
+                                    <td>{{ number_format($item->sum/(1024*1024), 2) }}MB({{ number_format($item->sum) }}B)</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endif
                 </div>
             </div>
 
