@@ -1,20 +1,25 @@
 <template>
     <div class="container">
         <div class="row mb-2">
-            <dropzone-component></dropzone-component>
+            <dropzone-component v-on:pushFileToParent="getFile"></dropzone-component>
         </div>
         <div class="row">
-            <image-component></image-component>
-            <image-component></image-component>
-            <image-component></image-component>
+            <image-component v-for="(uploadFile, index) in uploadFiles" :uploadFile="uploadFile" :key="index"></image-component>
         </div>
     </div>
 </template>
 
 <script>
     export default {
-        mounted() {
-            console.log('Component mounted.')
+        data(){
+            return {
+                uploadFiles: []
+            }
+        },
+        methods: {
+            getFile(file) {
+                this.uploadFiles.push(file);
+            }
         }
     }
 </script>

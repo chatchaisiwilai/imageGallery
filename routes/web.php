@@ -15,4 +15,5 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 
-Route::get('gallery', 'GalleryController@index')->name('gallery');
+Route::get('gallery', 'GalleryController@index')->middleware('auth')->name('gallery');
+Route::post('gallery/image', 'GalleryController@postImage')->name('gallery.post.image');

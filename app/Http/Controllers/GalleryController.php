@@ -6,13 +6,14 @@ use Illuminate\Http\Request;
 
 class GalleryController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
         return view('gallery');
+    }
+
+    public function postImage(Request $request)
+    {
+        $file = $request->file('file');
+        return $file->getClientOriginalName();
     }
 }
