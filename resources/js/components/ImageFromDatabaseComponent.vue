@@ -53,7 +53,7 @@
     }
     .image {
         width: 100%;
-        height: auto;
+        height: 100%;
         max-height: 150px;
     }
     .hover-image img{
