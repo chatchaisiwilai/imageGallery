@@ -35,9 +35,8 @@ class GalleryController extends Controller
             $response = response([
                 'errors' => [
                     'file' => [
-                        'some Error'
-                    ]
-                ]], 400);
+                        'some Error',
+                    ], ], ], 400);
         }
 
         return $response;
@@ -60,11 +59,11 @@ class GalleryController extends Controller
     {
         try {
             $images = Images::find($id);
-            if (! $images ) {
+            if (! $images) {
                 throw new \Exception('File not found in DB');
             }
 
-            if (!Storage::exists($images->path)) {
+            if (! Storage::exists($images->path)) {
                 throw new \Exception('File not found in storage');
             }
             $file = Storage::get($images->path);
@@ -81,7 +80,7 @@ class GalleryController extends Controller
     {
         try {
             $image = Images::find($id);
-            if (! $image ) {
+            if (! $image) {
                 throw new \Exception('File not found in DB');
             }
 

@@ -6,8 +6,6 @@ use App\Images;
 use App\User;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
@@ -47,7 +45,7 @@ class GalleryTest extends TestCase
 
     public function testPostImageValidateFailed()
     {
-        $response = $this->json('post','/gallery/image');
+        $response = $this->json('post', '/gallery/image');
 
         $response->assertStatus(422);
     }
@@ -58,8 +56,8 @@ class GalleryTest extends TestCase
 
         $file = UploadedFile::fake()->image('abc.jpeg')->size(999999);
 
-        $response = $this->json('post','/gallery/image', [
-            'file' => $file
+        $response = $this->json('post', '/gallery/image', [
+            'file' => $file,
         ]);
 
         $response->assertStatus(422);
@@ -71,8 +69,8 @@ class GalleryTest extends TestCase
 
         $file = UploadedFile::fake()->image('abc.pdf');
 
-        $response = $this->json('post','/gallery/image', [
-            'file' => $file
+        $response = $this->json('post', '/gallery/image', [
+            'file' => $file,
         ]);
 
         $response->assertStatus(422);
@@ -82,8 +80,8 @@ class GalleryTest extends TestCase
     {
         $file = UploadedFile::fake()->image('abc.jpeg');
 
-        $response = $this->json('post','/gallery/image', [
-            'file' => $file
+        $response = $this->json('post', '/gallery/image', [
+            'file' => $file,
         ]);
 
         $response->assertStatus(200);
@@ -97,13 +95,13 @@ class GalleryTest extends TestCase
      */
     public function testPostImageFailed()
     {
-        $mock = \Mockery::mock('overload:'. Images::class);
+        $mock = \Mockery::mock('overload:'.Images::class);
         $mock->shouldReceive('create')->andThrow(new \Exception('some error'));
 
         $file = UploadedFile::fake()->image('abc.jpeg');
 
-        $response = $this->json('post','/gallery/image', [
-            'file' => $file
+        $response = $this->json('post', '/gallery/image', [
+            'file' => $file,
         ]);
 
         $response->assertStatus(400);
@@ -112,13 +110,13 @@ class GalleryTest extends TestCase
     public function testGetAllImage()
     {
         $file1 = UploadedFile::fake()->image('abc1.jpeg');
-        $this->json('post','/gallery/image', [
-            'file' => $file1
+        $this->json('post', '/gallery/image', [
+            'file' => $file1,
         ]);
 
         $file2 = UploadedFile::fake()->image('abc2.jpeg');
-        $this->json('post','/gallery/image', [
-            'file' => $file2
+        $this->json('post', '/gallery/image', [
+            'file' => $file2,
         ]);
 
         $response = $this->get('/gallery/image');
@@ -137,25 +135,24 @@ class GalleryTest extends TestCase
      */
     public function testGetAllImageFailed()
     {
-        $mock = \Mockery::mock('overload:'. Images::class);
+        $mock = \Mockery::mock('overload:'.Images::class);
         $mock->shouldReceive('where->get')->andThrow(new \Exception('some error'));
 
         $response = $this->get('/gallery/image');
 
         $response->assertStatus(400);
-
     }
 
     public function testGetImage()
     {
         $file = UploadedFile::fake()->image('abc.jpeg');
-        $post_image = $this->json('post','/gallery/image', [
-            'file' => $file
+        $post_image = $this->json('post', '/gallery/image', [
+            'file' => $file,
         ]);
 
         $array = json_decode($post_image->content(), 1);
 
-        $response = $this->get('/gallery/image/' . Arr::get($array, 'id'));
+        $response = $this->get('/gallery/image/'.Arr::get($array, 'id'));
 
         $response->assertStatus(200);
     }
@@ -163,15 +160,15 @@ class GalleryTest extends TestCase
     public function testGetImageFailedNoFileInStorage()
     {
         $file = UploadedFile::fake()->image('abc.jpeg');
-        $post_image = $this->json('post','/gallery/image', [
-            'file' => $file
+        $post_image = $this->json('post', '/gallery/image', [
+            'file' => $file,
         ]);
 
         Storage::delete($file->hashName('images'));
 
         $array = json_decode($post_image->content(), 1);
 
-        $response = $this->get('/gallery/image/' . Arr::get($array, 'id'));
+        $response = $this->get('/gallery/image/'.Arr::get($array, 'id'));
 
         $response->assertStatus(400);
     }
@@ -186,13 +183,13 @@ class GalleryTest extends TestCase
     public function testDeleteImage()
     {
         $file = UploadedFile::fake()->image('abc.jpeg');
-        $post_image = $this->json('post','/gallery/image', [
-            'file' => $file
+        $post_image = $this->json('post', '/gallery/image', [
+            'file' => $file,
         ]);
 
         $array = json_decode($post_image->content(), 1);
 
-        $response = $this->delete('/gallery/image/' . Arr::get($array, 'id'));
+        $response = $this->delete('/gallery/image/'.Arr::get($array, 'id'));
 
         $response->assertStatus(200);
     }

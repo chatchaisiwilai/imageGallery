@@ -23,6 +23,7 @@ class HomeController extends Controller
             'disk_usage_overview_count' => Images::where('user_id', Auth::id())->count(),
             'disk_usage_compositions' => $dis_usage_compositions,
         ];
+
         return view('home', $data);
     }
 }
