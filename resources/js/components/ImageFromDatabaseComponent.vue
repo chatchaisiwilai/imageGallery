@@ -1,5 +1,5 @@
 <template>
-    <div class="col-4 mb-2" v-show="isShowComponent">
+    <div class="col-4 mb-2 hover-image" v-show="isShowComponent">
         <div style="height: 150px">
             <img :src="imageUrl" class="image">
             <div class="position-absolute t40l35">
@@ -55,5 +55,19 @@
         width: 100%;
         height: auto;
         max-height: 150px;
+    }
+    .hover-image img{
+        opacity: 1;
+    }
+    .hover-image:hover img{
+        opacity: 0.3;
+    }
+    .hover-image:hover button{
+        opacity: 1;
+        display: unset;
+    }
+    .hover-image button{
+        opacity: 1;
+        display: none;
     }
 </style>

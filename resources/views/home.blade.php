@@ -31,7 +31,7 @@
                 <div class="card-header">File Usage Compositions</div>
 
                 <div class="card-body">
-                    @if ($disk_usage_compositions->count() < 0)
+                    @if ($disk_usage_compositions->count() == 0)
                         No data
                     @else
                         <table class="table">
