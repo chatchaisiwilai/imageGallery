@@ -32,7 +32,12 @@ class GalleryController extends Controller
 
             $response = response($images, 200);
         } catch (\Exception $e) {
-            $response = response($e->getMessage(), 400);
+            $response = response([
+                'errors' => [
+                    'file' => [
+                        'some Error'
+                    ]
+                ]], 400);
         }
 
         return $response;

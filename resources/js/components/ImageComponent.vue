@@ -7,11 +7,14 @@
                 <button type="button" class="btn btn-info" v-on:click="pushImageUrlToParent" data-toggle="modal" data-target="#exampleModalCenter"><i class="fas fa-search"></i></button>
                 <button type="button" class="btn btn-warning" v-on:click="notShowComponent"><i class="fas fa-trash-restore-alt"></i></button>
             </div>
-            <div class="position-absolute t40l50 error" v-show="isShowError">
+            <div class="image" v-show="isShowError" style="text-align: center;">
+                <i class="fas fa-exclamation-triangle fa-5x" style="color: red;"></i>
+                <h5 style="color: red;">{{ textError }}</h5>
+            </div>
+            <div class="position-absolute t40l40 error" v-show="isShowError">
                 <button type="button" class="btn btn-danger" v-on:click="notShowComponentError"><i class="fas fa-trash-restore-alt"></i></button>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -20,6 +23,7 @@
         data: function () {
             return {
                 textCenter: '',
+                textError: 'Some Error',
                 isShowPercent: true,
                 isShowImage: false,
                 isShowSuccess: false,
@@ -52,12 +56,10 @@
                         this.isShowPercent = false;
                         this.isShowImage = true;
                         this.isShowSuccess = true;
-                    } else {
-                        this.isShowError = true;
                     }
-
                 }.bind(this))
                 .catch(function (error) {
+                    this.textError = error.response.data.errors.file[0];
                     this.isShowPercent = false;
                     this.isShowError = true;
             }.bind(this));
@@ -85,9 +87,9 @@
         top: 40%;
         left: 35%;
     }
-    .t40l50 {
+    .t40l40 {
         top: 40%;
-        left: 50%;
+        left: 40%;
     }
     .image {
         width: 100%;
@@ -107,5 +109,8 @@
     .hover-image button{
         opacity: 1;
         display: none;
+    }
+    .hover-image:hover .image{
+        opacity: 0.3;
     }
 </style>
