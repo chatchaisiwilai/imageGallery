@@ -4,6 +4,7 @@
             <dropzone-component v-on:pushFileToParent="getFile"></dropzone-component>
         </div>
         <div class="row">
+            <image-from-database-component v-for="(imageDatabase, index) in imagesDatabase" :imageDatabase="imageDatabase" :key="index" v-on:pushImageUrlToParent="getImageUrl"></image-from-database-component>
             <image-component v-for="(uploadFile, index) in uploadFiles" :uploadFile="uploadFile" :key="index" v-on:pushImageUrlToParent="getImageUrl"></image-component>
         </div>
 
@@ -28,8 +29,14 @@
         data(){
             return {
                 uploadFiles: [],
+                imagesDatabase: [],
                 imageUrl: ''
             }
+        },
+        created() {
+            axios.get('gallery/image').then(function (response) {
+                this.imagesDatabase = response.data;
+            }.bind(this));
         },
         methods: {
             getFile(file) {

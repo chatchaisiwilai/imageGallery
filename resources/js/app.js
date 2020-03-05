@@ -23,6 +23,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('gallery-component', require('./components/GalleryComponent').default);
 Vue.component('dropzone-component', require('./components/DropZoneComponent').default);
 Vue.component('image-component', require('./components/ImageComponent').default);
+Vue.component('image-from-database-component', require('./components/ImageFromDatabaseComponent').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

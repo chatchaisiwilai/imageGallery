@@ -36,8 +36,6 @@
             'uploadFile'
         ],
         created() {
-            console.log(this.uploadFile);
-
             let formData = new FormData();
             formData.append('file', this.uploadFile);
 
