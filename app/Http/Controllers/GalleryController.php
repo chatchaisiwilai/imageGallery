@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostImage;
 use App\Images;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class GalleryController extends Controller
 {
     private $path = 'images';
+
     public function index()
     {
         return view('gallery');
@@ -53,7 +53,6 @@ class GalleryController extends Controller
             $response = response($e->getMessage(), 400);
         }
 
-
         return $response;
     }
 
@@ -61,7 +60,7 @@ class GalleryController extends Controller
     {
         try {
             $images = Images::find($id);
-            if (!$images) {
+            if (! $images ) {
                 throw new \Exception('File not found in DB');
             }
 
@@ -82,7 +81,7 @@ class GalleryController extends Controller
     {
         try {
             $image = Images::find($id);
-            if (!$image) {
+            if (! $image ) {
                 throw new \Exception('File not found in DB');
             }
 

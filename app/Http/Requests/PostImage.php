@@ -24,7 +24,7 @@ class PostImage extends FormRequest
     public function rules()
     {
         return [
-            'file' => 'required|file|mimes:jpeg,bmp,png|max:102400'
+            'file' => 'required|file|mimes:jpeg,bmp,png|max:102400',
         ];
     }
 

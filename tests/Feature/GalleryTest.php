@@ -27,6 +27,13 @@ class GalleryTest extends TestCase
         Storage::fake('local');
     }
 
+    public function testIndexHome()
+    {
+        $response = $this
+            ->get('/');
+        $response->assertStatus(200);
+    }
+
     public function testIndex()
     {
         $response = $this
