@@ -18,47 +18,77 @@ class GalleryController extends Controller
 
     public function postImage(PostImage $request)
     {
-        $file = $request->file('file');
-        $file_store = $file->store($this->path);
+        try {
+            $file = $request->file('file');
+            $file_store = $file->store($this->path);
 
-        $images = Images::create([
-            'user_id' => Auth::id(),
-            'name' => $file->getClientOriginalName(),
-            'mime' => $file->getClientMimeType(),
-            'size' => $file->getSize(),
-            'path' => $file_store,
-        ]);
+            $images = Images::create([
+                'user_id' => Auth::id(),
+                'name' => $file->getClientOriginalName(),
+                'mime' => $file->getClientMimeType(),
+                'size' => $file->getSize(),
+                'path' => $file_store,
+            ]);
 
-        return response($images, 200);
+            $response = response($images, 200);
+        } catch (\Exception $e) {
+            $response = response($e->getMessage(), 400);
+        }
+
+        return $response;
     }
 
     public function getAllImage()
     {
-        $images = Images::where('user_id', Auth::id())->get();
+        try {
+            $images = Images::where('user_id', Auth::id())->get();
 
-        return response($images, 200);
+            $response = response($images, 200);
+        } catch (\Exception $e) {
+            $response = response($e->getMessage(), 400);
+        }
+
+
+        return $response;
     }
 
     public function getImage($id)
     {
-        $images = Images::find($id);
-        if ($images) {
+        try {
+            $images = Images::find($id);
+            if (!$images) {
+                throw new \Exception('File not found in DB');
+            }
+
             $file = Storage::get($images->path);
-            return response($file, 200)->header('Content-Type', $images->mime);
-        } else {
-            return response('file not found', 400);
+            if (!$file) {
+                throw new \Exception('File not found in storage');
+            }
+
+            $response = response($file, 200)->header('Content-Type', $images->mime);
+        } catch (\Exception $e) {
+            $response = response($e->getMessage(), 400);
         }
+
+        return $response;
     }
 
-    public function deleteImage($id) {
-        $image = Images::find($id);
-        if ($image) {
+    public function deleteImage($id)
+    {
+        try {
+            $image = Images::find($id);
+            if (!$image) {
+                throw new \Exception('File not found in DB');
+            }
+
             Storage::delete($image->path);
             $image->delete();
 
-            return response('success', 200);
-        } else {
-            return response('file not found', 400);
+            $response = response('success', 200);
+        } catch (\Exception $e) {
+            $response = response('file not found', 400);
         }
+
+        return $response;
     }
 }
