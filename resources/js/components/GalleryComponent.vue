@@ -4,8 +4,8 @@
             <dropzone-component v-on:pushFileToParent="getFile"></dropzone-component>
         </div>
         <div class="row">
-            <image-from-database-component v-for="(imageDatabase, index) in imagesDatabase" :imageDatabase="imageDatabase" :key="index" v-on:pushImageUrlToParent="getImageUrl"></image-from-database-component>
-            <image-component v-for="(uploadFile, index) in uploadFiles" :uploadFile="uploadFile" :key="index" v-on:pushImageUrlToParent="getImageUrl"></image-component>
+            <image-from-database-component v-for="(imageDatabase, index) in imagesDatabase" :imageDatabase="imageDatabase" :key="index + 'db'" v-on:pushImageUrlToParent="getImageUrl"></image-from-database-component>
+            <image-component v-for="(uploadFile, index) in uploadFiles" :uploadFile="uploadFile" :key="index + 'input'" v-on:pushImageUrlToParent="getImageUrl"></image-component>
         </div>
 
         <!-- Modal -->
