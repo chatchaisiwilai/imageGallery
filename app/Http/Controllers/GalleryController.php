@@ -32,6 +32,13 @@ class GalleryController extends Controller
         return response($images, 200);
     }
 
+    public function getAllImage()
+    {
+        $images = Images::where('user_id', Auth::id())->get();
+
+        return response($images, 200);
+    }
+
     public function getImage($id)
     {
         $images = Images::find($id);
