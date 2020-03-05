@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Images;
 use App\User;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -83,6 +84,24 @@ class GalleryTest extends TestCase
         $this->assertTrue(Storage::disk('local')->exists('images/'.$file->hashName()));
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
+    public function testPostImageFailed()
+    {
+        $mock = \Mockery::mock('overload:'. Images::class);
+        $mock->shouldReceive('create')->andThrow(new \Exception('some error'));
+
+        $file = UploadedFile::fake()->image('abc.jpeg');
+
+        $response = $this->json('post','/gallery/image', [
+            'file' => $file
+        ]);
+
+        $response->assertStatus(400);
+    }
+
     public function testGetAllImage()
     {
         $file1 = UploadedFile::fake()->image('abc1.jpeg');
@@ -105,6 +124,21 @@ class GalleryTest extends TestCase
         $this->assertTrue(Arr::get($array, '1.path') == $file2->hashName('images'));
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
+    public function testGetAllImageFailed()
+    {
+        $mock = \Mockery::mock('overload:'. Images::class);
+        $mock->shouldReceive('where->get')->andThrow(new \Exception('some error'));
+
+        $response = $this->get('/gallery/image');
+
+        $response->assertStatus(400);
+
+    }
+
     public function testGetImage()
     {
         $file = UploadedFile::fake()->image('abc.jpeg');
@@ -117,6 +151,22 @@ class GalleryTest extends TestCase
         $response = $this->get('/gallery/image/' . Arr::get($array, 'id'));
 
         $response->assertStatus(200);
+    }
+
+    public function testGetImageFailedNoFileInStorage()
+    {
+        $file = UploadedFile::fake()->image('abc.jpeg');
+        $post_image = $this->json('post','/gallery/image', [
+            'file' => $file
+        ]);
+
+        Storage::delete($file->hashName('images'));
+
+        $array = json_decode($post_image->content(), 1);
+
+        $response = $this->get('/gallery/image/' . Arr::get($array, 'id'));
+
+        $response->assertStatus(400);
     }
 
     public function testGetImageFailed()

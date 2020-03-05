@@ -65,10 +65,10 @@ class GalleryController extends Controller
                 throw new \Exception('File not found in DB');
             }
 
-            $file = Storage::get($images->path);
-            if (!$file) {
+            if (!Storage::exists($images->path)) {
                 throw new \Exception('File not found in storage');
             }
+            $file = Storage::get($images->path);
 
             $response = response($file, 200)->header('Content-Type', $images->mime);
         } catch (\Exception $e) {
